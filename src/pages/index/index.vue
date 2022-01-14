@@ -1,49 +1,47 @@
 <template>
-	<view class="content">
-		<image class="logo" src="/static/logo.png"></image>
-		<view>
-			<text class="title">{{title}}</text>
-		</view>
-	</view>
+    <view>
+        <share-poster ref="poster">
+            <!-- <image mode="widthFix" :src="tempFilePath"></image> -->
+            <view>
+                <text class="title">这是一段文字</text>
+            </view>
+        </share-poster>
+        <view @click="createPoster">生成海报</view>
+    </view>
 </template>
 
 <script>
-	export default {
-		data() {
-			return {
-				title: 'Hello'
-			}
-		},
-		onLoad() {
+import SharePoster from '@/components/share-poster/index.vue';
 
-		},
-		methods: {
-
-		}
-	}
+export default {
+    components: {
+        SharePoster
+    },
+    data() {
+        return {
+            imageList: [],
+            tempFilePath: ''
+        };
+    },
+    async onLoad(options) {},
+    methods: {
+        // 生成海报
+        createPoster() {
+            uni.showLoading({ title: '正在生成图片' });
+            this.$refs.poster
+                .create()
+                .then(res => {
+                    uni.hideLoading();
+                    this.previewImage(res.path);
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        },
+        // 预览图片
+        previewImage(filePath) {
+            uni.previewImage({ urls: [filePath] });
+        }
+    }
+};
 </script>
-
-<style>
-	.content {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-	}
-
-	.logo {
-		height: 200rpx;
-		width: 200rpx;
-		margin: 200rpx auto 50rpx auto;
-	}
-
-	.text-area {
-		display: flex;
-		justify-content: center;
-	}
-
-	.title {
-		font-size: 36rpx;
-		color: #8f8f94;
-	}
-</style>
