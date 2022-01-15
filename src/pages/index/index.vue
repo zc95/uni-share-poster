@@ -48,7 +48,7 @@ export default {
             resultImg: '' // 最终生成的图片
         };
     },
-    async onLoad(options) {
+    async onLoad() {
         this.transfromImage();
     },
     methods: {
@@ -73,7 +73,7 @@ export default {
             this.$refs.poster
                 .create()
                 .then(res => {
-                    this.resultImg = res.path;
+                    this.resultImg = res.base64;
                     uni.hideLoading();
                 })
                 .catch(err => {
