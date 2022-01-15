@@ -11,7 +11,7 @@ uni-app 分享海报、截图，基于 renderjs、html2canvas。
 > npm install --save html2canvas
 
 ## 基本用法
-
+可以去https://github.com/zc95/uni-share-poster clone一份demo
 文件 `src/pages/index/index.vue` 中有完整示例
 
 ```html
