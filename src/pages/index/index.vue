@@ -8,10 +8,7 @@
                     <view class="subtitle">基于renderjs、html2canvas，实现分享海报、截图。</view>
                     <view class="uni-app">UNI-APP</view>
                 </view>
-                <view class="desc">
-                    uni-app 中本不能实现访问、操作 dom 等行为，那要怎么去调用 html2canvas 呢？我们可以使用 renderjs，在 uni-app 中运行 for web 的 js
-                    库，本插件基于renderjs、html2canvas，让你更快捷的实现分享海报、截图等功能。
-                </view>
+                <view class="desc"> 基于renderjs、html2canvas，让你更快捷的实现分享海报、截图等功能。本插件仅支持在uni-app中使用。</view>
                 <view class="foot">
                     <view class="left">
                         <view class="user">
@@ -74,7 +71,7 @@ export default {
             this.$refs.poster
                 .create()
                 .then(res => {
-                    this.resultImg = res.base64;
+                    this.resultImg = res.path;
                     uni.hideLoading();
                 })
                 .catch(err => {
