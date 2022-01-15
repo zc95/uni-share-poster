@@ -1,4 +1,4 @@
-function getLocalFilePath(path) {
+async function getLocalFilePath(path) {
     if (path.indexOf('_www') === 0 || path.indexOf('_doc') === 0 || path.indexOf('_documents') === 0 || path.indexOf('_downloads') === 0) {
         return path;
     }
@@ -8,8 +8,12 @@ function getLocalFilePath(path) {
     if (path.indexOf('/storage/emulated/0/') === 0) {
         return path;
     }
+    if (path.indexOf('http') === 0) {
+        const tempFilePath = await downloadFile(path);
+        return tempFilePath;
+    }
     if (path.indexOf('/') === 0) {
-        var localFilePath = plus.io.convertAbsoluteFileSystem(path);
+        var localFilePath = plus.io.convertLocalFileSystemURL(path);
         if (localFilePath !== path) {
             return localFilePath;
         } else {
@@ -17,6 +21,20 @@ function getLocalFilePath(path) {
         }
     }
     return '_www/' + path;
+}
+
+function downloadFile(url) {
+    return new Promise((resolve, reject) => {
+        uni.downloadFile({
+            url,
+            success: ({ tempFilePath, statusCode }) => {
+                resolve(tempFilePath);
+            },
+            fail: error => {
+                reject(error);
+            }
+        });
+    });
 }
 
 function dataUrlToBase64(str) {
@@ -44,7 +62,7 @@ function biggerThan(v1, v2) {
 }
 
 export function pathToBase64(path) {
-    return new Promise(function (resolve, reject) {
+    return new Promise(async function (resolve, reject) {
         if (typeof window === 'object' && 'document' in window) {
             if (typeof FileReader === 'function') {
                 var xhr = new XMLHttpRequest();
@@ -79,8 +97,9 @@ export function pathToBase64(path) {
             return;
         }
         if (typeof plus === 'object') {
+            let localPath = await getLocalFilePath(path);
             plus.io.resolveLocalFileSystemURL(
-                getLocalFilePath(path),
+                localPath,
                 function (entry) {
                     entry.file(
                         function (file) {
