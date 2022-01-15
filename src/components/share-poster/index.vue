@@ -1,8 +1,6 @@
 <template>
-    <view class="content">
-        <view id="sharePosterId" :timestamp="timestamp" :change:timestamp="renderScript.generateImage">
-            <slot></slot>
-        </view>
+    <view id="sharePosterId" :timestamp="timestamp" :change:timestamp="renderScript.generateImage">
+        <slot></slot>
     </view>
 </template>
 
@@ -14,7 +12,6 @@ export default {
         return {
             timestamp: 0, // 时间戳，监听到该值变化时，可以触发randerjs内的方法
             callbackInfo: null, // renderjs返回的数据
-            loading: false, // 正在生成海报
             timer: null // 定时器
         };
     },

@@ -1,6 +1,6 @@
 <template>
     <view class="page">
-        <share-poster ref="poster">
+        <share-poster class="hide" ref="poster">
             <view class="poster-view">
                 <view class="main-info">
                     <image class="head-img" :src="cover" mode="aspectFill" />
@@ -25,6 +25,9 @@
             </view>
         </share-poster>
 
+        <image style="width: 100%" v-if="resultImg" @click="previewImage(resultImg)" :src="resultImg" mode="widthFix" />
+
+        <view v-if="resultImg" class="btn" hover-class="hover-class" @click="saveImageToPhotosAlbum(resultImg)">保存图片到手机</view>
         <view class="btn" hover-class="hover-class" @click="createPoster">生成海报</view>
     </view>
 </template>
@@ -41,7 +44,8 @@ export default {
         return {
             cover: '', // 封面
             avatar: '', // 头像
-            code: '' // 本地二维码图片
+            code: '', // 本地二维码图片
+            resultImg: '' // 最终生成的图片
         };
     },
     async onLoad(options) {
@@ -69,8 +73,8 @@ export default {
             this.$refs.poster
                 .create()
                 .then(res => {
+                    this.resultImg = res.path;
                     uni.hideLoading();
-                    this.previewImage(res.path);
                 })
                 .catch(err => {
                     console.log(err);
@@ -79,6 +83,19 @@ export default {
         // 预览图片
         previewImage(filePath) {
             uni.previewImage({ urls: [filePath] });
+        },
+        // 保存图片
+        saveImageToPhotosAlbum(filePath) {
+            uni.saveImageToPhotosAlbum({
+                filePath, // 需要临时文件路径，base64无法保存
+                success: () => {
+                    uni.showModal({
+                        title: '提示',
+                        content: '图片已保存到相册',
+                        showCancel: false
+                    });
+                }
+            });
         }
     }
 };
@@ -87,6 +104,13 @@ export default {
 <style scoped>
 .page {
     overflow: hidden;
+}
+
+/* 通常我们不太需要原本的元素，只有开发的时候用得到。可以用定位的方式将原来的元素移出屏幕外，以达到隐藏的目的 */
+.hide {
+    position: fixed;
+    bottom: -200vh;
+    z-index: -1;
 }
 
 .poster-view {
