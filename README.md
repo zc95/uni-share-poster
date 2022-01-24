@@ -1,6 +1,7 @@
 ## uni-share-poster
 
 uni-app 分享海报、截图，基于 renderjs、html2canvas。
+uni-app插件地址：[https://ext.dcloud.net.cn/plugin?id=7246](https://ext.dcloud.net.cn/plugin?id=7246)
 
 > uni-app 中本不能实现访问、操作 dom 等行为，那要怎么去调用 html2canvas 呢？我们可以使用 renderjs，在 uni-app 中运行 for web 的 js 库，本插件基于 renderjs、html2canvas，让你更快捷的实现分享海报、截图等功能。
 
